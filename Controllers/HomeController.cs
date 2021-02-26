@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
+using System.Xml;
 using www.Models;
 
 namespace www.Controllers
@@ -20,6 +22,19 @@ namespace www.Controllers
 
         public IActionResult Index()
         {
+            var url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCma2-ifEBQPrbtoNQuyYOYg";
+            using (var reader = XmlReader.Create(url))
+            {
+
+                var feed = SyndicationFeed.Load(reader);
+                ViewBag.rss = feed.Items.Take(5);
+            }
+            url = "https://www.reddit.com/r/news/.rss";
+            using (var reader2 = XmlReader.Create(url))
+            { 
+                var feed2 = SyndicationFeed.Load(reader2);
+            ViewBag.rss2 = feed2.Items.Take(5);
+            }
             return View();
         }
 

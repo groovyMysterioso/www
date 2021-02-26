@@ -1,0 +1,14 @@
+﻿@model www.Models.FeedVM
+
+<div class="container">
+    @foreach (var link in Model.ContentLinks)
+    {
+    <dl class="row nav-item small">
+            <a class="nav-link" href="@link.UrlLink">@link.Title</a>
+            <div class="small">
+                @Html.Raw(link.ContentText)
+            </div>
+    </dl>
+    }
+</div>
+

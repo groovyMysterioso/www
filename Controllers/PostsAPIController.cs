@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +29,68 @@ namespace www.Controllers
         {
             return await _context.Posts.ToListAsync();
         }
+        [HttpGet]
+        public  string GetUserPostsRss(long UserID)
+        {
+            var User = _context.Users.Find(UserID);
+            SyndicationFeed feed = new SyndicationFeed("Feed Title", "Feed Description", new Uri("http://jamespritts.com"), "FeedID", DateTime.Now);
+            // Add a custom attribute.
+            XmlQualifiedName xqName = new XmlQualifiedName("GameBeOkKey");
+            feed.AttributeExtensions.Add(xqName, "codeHard1");
 
+            SyndicationPerson sp = new SyndicationPerson(User.Email, User.UserName, $"http://jamespritts.com/u/{User.UserName}");
+            feed.Authors.Add(sp);
+
+            SyndicationCategory category = new SyndicationCategory("FeedCategory", "CategoryScheme", "CategoryLabel");
+            feed.Categories.Add(category);
+
+            feed.Contributors.Add(new SyndicationPerson("james.pritts@gmail.com", "James Pritts", "http://jamespritts.com"));
+            feed.Copyright = new TextSyndicationContent($"Copyright {DateTime.Now.Year}");
+            feed.Description = new TextSyndicationContent("Personal Post Feed");
+
+            // Add a custom element.
+            XmlDocument doc = new XmlDocument();
+            XmlElement feedElement = doc.CreateElement("CustomElement");
+            feedElement.InnerText = "Some text";
+            feed.ElementExtensions.Add(feedElement);
+
+            feed.Generator = "GameBeOk User Rss Feed";
+            feed.Id = "FeedID";
+            feed.ImageUrl = new Uri("http://server/image.jpg");
+
+            var userPosts = _context.Posts.Where(x => x.User == User.Email);
+
+            List<SyndicationItem> items = new List<SyndicationItem>();
+            foreach(var v in userPosts)
+            {
+
+            TextSyndicationContent textContent = new TextSyndicationContent(v.Content);
+            SyndicationItem item = new SyndicationItem("User Post", textContent, new Uri("http://server/items"), "ItemID", DateTime.Now);
+
+            items.Add(item);
+            }
+
+            feed.Items = items;
+            feed.Language = "en-us";
+            feed.LastUpdatedTime = DateTime.Now;
+
+            SyndicationLink link = new SyndicationLink(new Uri("http://server/link"), "alternate", "Link Title", "text/html", 1000);
+            feed.Links.Add(link);
+
+            XmlWriter atomWriter = XmlWriter.Create("atom.xml");
+            Atom10FeedFormatter atomFormatter = new Atom10FeedFormatter(feed);
+            atomFormatter.WriteTo(atomWriter);
+            atomWriter.Close();
+
+            using (XmlWriter rssWriter = XmlWriter.Create("rss.xml"))
+            {
+
+                Rss20FeedFormatter rssFormatter = new Rss20FeedFormatter(feed);
+                rssFormatter.WriteTo(rssWriter);
+                 return rssWriter.ToString();
+            }
+
+        }
         // GET: api/Posts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPost(string id)

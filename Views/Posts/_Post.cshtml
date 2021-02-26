@@ -1,0 +1,55 @@
+﻿@model Post
+@{
+    var existedSince = (DateTime.Now - Model.Created) switch
+    {
+        { TotalHours: < 1 } ts => $"{ts.Minutes} minutes ago",
+        { TotalDays: < 1 } ts => $"{ts.Hours} hours ago",
+        { TotalDays: < 2 } => $"yesterday",
+        { TotalDays: < 5 } => $"on {Model.Created.DayOfWeek}",
+        var ts => $"{ts.Days} days ago",
+    };
+}
+<div>
+
+    <div class="dropdown">
+        <div class="dropdown-menu" aria-labelledby="menu-@Model.Id">
+            <a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <a href="#" class="dropdown-item delete-button" data-toggle="modal" data-target="#delete-modal" onclick="loadDelete('@Model.Id');">Delete</a>
+        </div>
+    </div>
+<p>
+    @Model.User
+    <small>@existedSince</small>
+</p>
+    <button class="btn btn-secondary" type="button" id="menu-@Model.Id" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="display:inline">
+        ...
+    </button>
+
+</div>
+@if (!Model.isDeleted)
+        {
+@if (Model.Content != null)
+            {
+<div class="post-content">@Html.Raw(Model.Content.Trim())</div>
+            }
+<div class="embed-code"></div>
+<div class="attachment-code"></div>
+<input type="hidden" class="attachment-code" value="@Model.Attachments" />
+<div class="text-right text-sm-right">
+    <small>
+    </small>
+</div>
+<div class="row">
+    <button class="col-6">Like</button>
+
+    <button class="col-6">Comment</button>
+</div>
+<div class="row">
+
+</div>
+
+        }
+        else
+        {
+<i>This message has been deleted.</i>
+        }

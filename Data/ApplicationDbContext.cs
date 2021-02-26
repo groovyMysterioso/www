@@ -8,9 +8,7 @@ using www.Models;
 
 namespace www.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>,
-    ApplicationUserRole, IdentityUserLogin<string>,
-    IdentityRoleClaim<string>, IdentityUserToken<string>>
+    public partial class ApplicationDbContext : IdentityDbContext<IdentityUser>
 
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -18,26 +16,11 @@ namespace www.Data
         {
         }
         public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<Profile> Profiles { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
-        public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+        public DbSet<Feed> Feed { get; set; }
+        public DbSet<FeedVM> FeedVM { get; set; }
+        public DbSet<AppFile> AppFile { get; set; }
 
-            builder.Entity<ApplicationUserRole>(userRole =>
-            {
-                userRole.HasKey(ur => new { ur.UserId, ur.RoleId });
-
-                userRole.HasOne(ur => ur.Role)
-                    .WithMany(r => r.UserRoles)
-                    .HasForeignKey(ur => ur.RoleId)
-                    .IsRequired();
-
-                userRole.HasOne(ur => ur.User)
-                    .WithMany(r => r.UserRoles)
-                    .HasForeignKey(ur => ur.UserId)
-                    .IsRequired();
-            });
-        }
     }
 }

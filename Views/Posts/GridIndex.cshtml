@@ -1,0 +1,29 @@
+﻿@model IEnumerable<www.Models.Post>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<partial name="_CreatePost" />
+
+<script>
+    function loadDelete(itemID) {
+        $.get({
+            url: "Posts/DeletePartial",
+            data: { id: itemID },
+            success: function (data, result) {
+                $('#deleted-modal-content').html(data);
+            }
+        });
+    }
+</script>
+@foreach (var item in Model)
+{
+    <div class="card bg-light post row">
+        <div class="card-body col-6">
+            @Html.Partial("_Post", item)
+        </div>
+    </div>
+    <br />
+}
+<partial name="_Create" />
+<partial name="_Delete" />

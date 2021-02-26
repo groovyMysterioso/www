@@ -12,9 +12,9 @@ namespace www.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
+        public string SenderID { get; set; }
+        public string RecipientID { get; set; }
         public string Content { get; set; }
-        public int RecipientID { get; set; }
-        public int SenderID { get; set; }
 
     }
 }

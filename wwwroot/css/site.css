@@ -69,3 +69,28 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+#profile-pic{
+    width: 100%;
+}
+
+.message-pic {
+    width: 64px;
+}
+
+.grid-post iframe{
+    zoom: 0.5
+}
+.rounded-button{
+    border-radius:100%;
+    background-color:lightgray;
+
+}
+.rounded-button:hover{
+    background-color:darkgrey;
+    text-decoration:none;
+}
+.rounded-button {
+    border-radius: 32px;
+    padding: 6px 6px 6px 12px;
+}

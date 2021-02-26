@@ -1,58 +1,138 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<partial name="_navigation" />
 
-    <style>
-        .fakeimg {
-            height: 200px;
-            background: #aaa;
-        }
-    </style>
-@section scripts{
-
-    <script>
-    function loadPosts() {
-        console.log("LoadingPosts");
-        $.get('@Url.Action("IndexPartial","Posts")', function (data) {
-            $('#post-div').html(data);
-           });
-    }
-    $().ready(function () {
-        loadPosts();
-    });
-    </script>
- }
-    <div class="container" style="margin-top:30px">
-        <div class="row">
-            <div class="col-sm-4">
-                <h2>About Me</h2>
-                <h5>Photo of me:</h5>
-                <div class="fakeimg">Fake Image</div>
-                <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
-                <h3>Some Links</h3>
-                <p>Lorem ipsum dolor sit ame.</p>
-                <ul class="nav nav-pills flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Active</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
-                </ul>
-                <hr class="d-sm-none">
+<div class="container-fluid" style="margin-top:30px">
+    <div class="row">
+        <div class="col-sm-3">
+            <h2>James Pritts</h2>
+            <div class="col-sm-10 offset-sm-1">
+                <img id="profile-pic" class="img-fluid rounded" src="~/JamesProfile.jpg" />
             </div>
-            <div id="post-div" class="col-sm-8" > </div>
+            <p>I'm not well respected by many, but I am by the well respectable.</p>
+            <hr class="d-sm-none">
+        </div>
+        <div id="post-div" class="col-sm-6"> </div>
+        <div id="news-div" class="col-sm-3">
+            <div id="feeds" class="carousel slide" data-ride="carousel" data-interval="15000">
+                <!-- Indicators -->
+                <ul class="carousel-indicators">
+                    <li data-target="#feeds" data-slide-to="0" class="active"></li>
+                    <li data-target="#feeds" data-slide-to="1"></li>
+                    <li data-target="#feeds" data-slide-to="2"></li>
+                </ul>
+                <!-- The slideshow -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <a class="weatherwidget-io" href="https://forecast7.com/en/39d48n88d37/mattoon/?unit=us" data-label_1="MATTOON" data-label_2="WEATHER" data-theme="original">MATTOON WEATHER</a>
+                        <script>
+                            !function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = 'https://weatherwidget.io/js/widget.min.js'; fjs.parentNode.insertBefore(js, fjs); } }(document, 'script', 'weatherwidget-io-js');
+                        </script>
+                        <h3>News</h3>
+                        <ul class="nav nav-pills flex-column">
+                            @foreach (var link in ViewBag.rss2)
+                            {
+                                <li class="nav-item small">
+                                    <a class="nav-link" href="@link.Links[0].Uri.OriginalString">@link.Title.Text</a>
+                                    <div class="small">
+                                        @(link.Content!=null?Html.Raw(link.Content.Text):"")
+                                    </div>
+                                    <button class="btn btn-sm" style="z-index:3;" onclick="shareThis('@link.Links[0].Uri.OriginalString');">Share This Link</button>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="carousel-item">
+                        <h3>Youtube Channel</h3>
+                        <ul class="nav nav-pills flex-column">
+                            @foreach (var link in ViewBag.rss)
+                            {
+                                <li class="nav-item small">
+                                    <a class="nav-link" href="@link.Links[0].Uri.OriginalString">@link.Title.Text</a>
+                                    <div class="small">
+                                        @(link.Content!=null?Html.Raw(link.Content.Text):"")
+                                    </div>
+                                    <button class="btn btn-sm" style="z-index:3;" onclick="shareThis('@link.Links[0].Uri.OriginalString');">Share This Link</button>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Left and right controls -->
+                <a class="carousel-control-prev" href="#feeds" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#feeds" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="messages" class="row ml-1" style="position:fixed;bottom:0px;width:100%;z-index:2">
+    <div class="card col-3 ml-auto mr-3">
+        <div>
+            <h1 data-toggle="collapse" data-target="#FartHeadMessages">FartHead</h1>
+            <div id="FartHeadMessages" class="collapse">
+                <div class="row">
+
+                    <img class="col-4 rounded-right" src="~/JamesProfile.jpg" />
+                    <div class="col-8 alert alert-info">FartHead</div>
+                </div>
+                <div class="">
+
+                    <div class="col-8 alert alert-info">Hey idiot</div>
+                    <img class="col-4 rounded-right" src="~/JamesProfile.jpg" />
+                </div>
+                <input name="message" class="form-control" />
+            </div>
         </div>
     </div>
 
-    <div class="jumbotron text-center" style="margin-bottom:0">
-        <p>Footer</p>
-    </div>
+    <div class="card col-3" style="bottom:0px;">
+        <div>
 
+            <h1 data-toggle="collapse" data-target="#friendsList">Messages</h1>
+            <div id="friendsList" class="collapse">
+
+                <div class="card alert-success">FartHead</div>
+                <div class="card alert-success">Derek</div>
+                <div class="card alert-success">Chelsey</div>
+                <div class="card alert-success">FakeFartHead</div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+
+    <script>
+        function loadPosts() {
+
+        $.get('@Url.Action("IndexPartial","Posts")', function (data) {
+            console.log(data);
+            $('#post-div').html(data);
+            $('.post div.post-content').each(function (e) {
+            console.log(e);
+                LinkExtractorDiv(this);
+                AttachmentAttacher(this);
+            });
+           });
+        }
+        function shareThis(contents) {
+            $('#post-button').trigger('click');
+            $('textarea#Content').val(contents);
+        }
+    $().ready(function () {
+        loadPosts();
+    });
+        function openMessageWindow() {
+            $('#messages').prepend("");
+        }
+    </script>
+}
 

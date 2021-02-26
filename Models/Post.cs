@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,6 +15,16 @@ namespace www.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string Content { get; set; }
+        public DateTime Created { get; set; }
+        public string User{ get; set; }
+        public bool isDeleted { get; set; }
+        public string Attachments { get; set; }
+        public Post ()
+        {
+            Created = DateTime.Now;
+            isDeleted = false;
+        }
 
     }
+
 }
