@@ -14,9 +14,21 @@ namespace www.Models
         public string Description { get; set; }
         public string ProfileImage { get; set; }
         public string IdentityUser { get; set; }
+        public Page Page { get; set; }
+        public int PageID { get; set; }
+        public Profile() { }
         public Profile(string identityUser)
         {
             IdentityUser = identityUser;
+        }
+        public Profile(ProfileVM profileVM)
+        {
+            Id = profileVM.Id;
+            Name = profileVM.Name;
+            Description = profileVM.Description;
+            ProfileImage = profileVM.ProfileImage;
+            IdentityUser = profileVM.IdentityUser;
+
         }
     }
 }

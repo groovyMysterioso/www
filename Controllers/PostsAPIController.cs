@@ -58,7 +58,7 @@ namespace www.Controllers
             feed.Id = "FeedID";
             feed.ImageUrl = new Uri("http://server/image.jpg");
 
-            var userPosts = _context.Posts.Where(x => x.User == User.Email);
+            var userPosts = _context.Posts.Where(x => x.Sender == User.Email);
 
             List<SyndicationItem> items = new List<SyndicationItem>();
             foreach(var v in userPosts)

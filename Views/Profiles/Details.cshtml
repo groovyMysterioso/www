@@ -1,0 +1,29 @@
+﻿@model www.Models.Profile
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div>
+    <dl class="row">
+        <dd class="col-sm-6 offset-3">
+            <img class="img-fluid" src="/@Model.ProfileImage" />
+        </dd>
+        <dd class="col-sm-3">
+        </dd>
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Email:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IdentityUser)
+        </dd>
+        <dd class="col-sm-12">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+    </dl>
+        <a asp-action="Edit">Edit</a>
+</div>
+

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using hMailServer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Protocols;
 using www.Data;
 using www.Models;
 
@@ -71,6 +74,29 @@ namespace www.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+        }
+        private Domain HMailServerConnection() {
+            var objGlobal = new ApplicationClass();
+            objGlobal.Authenticate(ConfigurationManager.AppSettings["HMailUsername"], ConfigurationManager.AppSettings["HMailPassword"]);
+            return objGlobal.Domains.get_ItemByName(ConfigurationManager.AppSettings["hMailDomain"]);
+        }
+
+        public string AddNewAccount(string email,string password)
+        {
+            try
+            {
+                Domain domain = HMailServerConnection();
+                Accounts accounts = domain.Accounts;
+                var mailbox = accounts.Add();
+                mailbox.Address = email;
+                mailbox.Password = password;
+                mailbox.Save();
+                return "success";
+            }
+            catch(Exception ex)
+            {
+                return "error";
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

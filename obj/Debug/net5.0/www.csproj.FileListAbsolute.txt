@@ -527,3 +527,11 @@ C:\Users\james\source\repos\www\obj\Debug\net5.0\www.pdb
 C:\Users\james\source\repos\www\obj\Debug\net5.0\www.genruntimeconfig.cache
 C:\Users\james\source\repos\www\obj\Debug\net5.0\Razor\Views\Posts\_Post.cshtml.g.cs
 C:\Users\james\source\repos\www\obj\Debug\net5.0\Razor\Views\Posts\_CreatePost.cshtml.g.cs
+C:\Users\james\source\repos\www\obj\Debug\net5.0\Razor\Views\Profiles\Create.cshtml.g.cs
+C:\Users\james\source\repos\www\obj\Debug\net5.0\Razor\Views\Profiles\Delete.cshtml.g.cs
+C:\Users\james\source\repos\www\obj\Debug\net5.0\Razor\Views\Profiles\Details.cshtml.g.cs
+C:\Users\james\source\repos\www\obj\Debug\net5.0\Razor\Views\Profiles\Edit.cshtml.g.cs
+C:\Users\james\source\repos\www\obj\Debug\net5.0\Razor\Views\Profiles\Index.cshtml.g.cs
+C:\Users\james\source\repos\www\obj\Debug\net5.0\Razor\Views\Profiles\Profile.cshtml.g.cs
+C:\Users\james\source\repos\www\obj\Debug\net5.0\Interop.hMailServer.dll
+C:\Users\james\source\repos\www\obj\Debug\net5.0\www.csproj.ResolveComReference.cache

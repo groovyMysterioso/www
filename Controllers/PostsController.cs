@@ -24,6 +24,7 @@ namespace www.Controllers
         private readonly long _fileSizeLimit;
         private readonly string[] _permittedExtensions = { ".txt",".jpg" ,"mp4"};
         private readonly string _targetFilePath;
+        private IHostingEnvironment _env;
 
         public PostsController(ApplicationDbContext context, IConfiguration config, IHostingEnvironment env)
         {
@@ -46,7 +47,9 @@ namespace www.Controllers
         // GET: Posts
         public async Task<IActionResult> IndexPartial()
         {
-            return PartialView("ListIndex", await _context.Posts.OrderByDescending(x => x.Created).ToListAsync());
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+            ViewData["ProfilePic"] = _context.Profiles.First(x => x.IdentityUser == userId).ProfileImage;
+            return PartialView("ListIndex", await _context.Posts.Where(x=>x.Sender==userId).OrderByDescending(x => x.Created).ToListAsync());
         }
 
         // GET: Posts/Details/5
@@ -73,7 +76,6 @@ namespace www.Controllers
             return View();
         }
 
-        private IHostingEnvironment _env;
   
 
         // POST: Posts/Create
@@ -84,8 +86,8 @@ namespace www.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userId = User.FindFirstValue(ClaimTypes.Email); // will give the user's userId
-                Post.User = userId;
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // will give the user's userId
+                Post.Sender = userId;
                 var attachedFiles = new List<string>();
 
                 if(FileUpload.FormFiles!=null)

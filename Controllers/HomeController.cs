@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml;
+using www.Data;
 using www.Models;
 
 namespace www.Controllers
@@ -14,27 +17,20 @@ namespace www.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            var url = "https://www.youtube.com/feeds/videos.xml?channel_id=UCma2-ifEBQPrbtoNQuyYOYg";
-            using (var reader = XmlReader.Create(url))
-            {
-
-                var feed = SyndicationFeed.Load(reader);
-                ViewBag.rss = feed.Items.Take(5);
-            }
-            url = "https://www.reddit.com/r/news/.rss";
-            using (var reader2 = XmlReader.Create(url))
-            { 
-                var feed2 = SyndicationFeed.Load(reader2);
-            ViewBag.rss2 = feed2.Items.Take(5);
-            }
+            var youtubeFeed = new RssFeed("https://www.reddit.com/r/younknow/.rss");
+            ViewBag.rss = youtubeFeed.Items.Take(5);
+            var newsFeed = new RssFeed("https://www.reddit.com/r/news/.rss");
+            ViewBag.rss2 = newsFeed.Items.Take(5);
             return View();
         }
 

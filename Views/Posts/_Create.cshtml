@@ -1,15 +1,12 @@
 ﻿<div class="container fallback">
-    <!-- The Modal -->
     <div class="modal" id="create-modal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!-- Modal Header -->
                 <div class="modal-header">
                     <h4 class="modal-title">Create Post</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <form action="/Posts/Create" method="post" enctype="multipart/form-data">
-                    <!-- Modal body -->
                     <textarea style="white-space: pre-wrap;resize: none;" name="Content" id="Content" class="form-control" autofocus></textarea>
                     <div id="embed-code"></div>
                     <div class="card">
@@ -23,7 +20,6 @@
                         </span>
                     </div>
                     <input name="FileUpload.FormFiles" id="FileUpload.FormFiles" type="file" multiple style="display:none;" />
-                    <!-- Modal footer -->
                     <div class="modal-footer">
                         <div class="form-group">
                             <input type="submit" value="Create" class="btn btn-primary" />
@@ -39,14 +35,11 @@
         $('textarea#Content').on("keyup paste", function () {
             LinkExtractor();
         });
-    });
-    $().ready(function () {
+  
         $('.modal').on('shown.bs.modal', function () {
             $(this).find('[autofocus]').focus();
         });
     });
-</script>
-<script>
     function openFile(e) {
         $('input[type=file]').trigger('click');
     }

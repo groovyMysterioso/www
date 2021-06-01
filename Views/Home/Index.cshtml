@@ -5,12 +5,8 @@
 
 <div class="container-fluid" style="margin-top:30px">
     <div class="row">
-        <div class="col-sm-3">
-            <h2>James Pritts</h2>
-            <div class="col-sm-10 offset-sm-1">
-                <img id="profile-pic" class="img-fluid rounded" src="~/JamesProfile.jpg" />
-            </div>
-            <p>I'm not well respected by many, but I am by the well respectable.</p>
+        <div class="col-sm-3" id="profile">
+            
             <hr class="d-sm-none">
         </div>
         <div id="post-div" class="col-sm-6"> </div>
@@ -114,10 +110,8 @@
         function loadPosts() {
 
         $.get('@Url.Action("IndexPartial","Posts")', function (data) {
-            console.log(data);
             $('#post-div').html(data);
             $('.post div.post-content').each(function (e) {
-            console.log(e);
                 LinkExtractorDiv(this);
                 AttachmentAttacher(this);
             });
@@ -127,8 +121,14 @@
             $('#post-button').trigger('click');
             $('textarea#Content').val(contents);
         }
+        function loadProfile() {
+            $.get('@Url.Action("Details","Profiles")', function (data) {
+                $('div#profile').html(data);
+            });
+        }
     $().ready(function () {
         loadPosts();
+        loadProfile();
     });
         function openMessageWindow() {
             $('#messages').prepend("");
